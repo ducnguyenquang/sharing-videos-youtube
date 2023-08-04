@@ -1,21 +1,53 @@
-import useSWR from 'swr'
-import PersonComponent from '../components/Person'
-import type { Person } from '../interfaces'
+import LoginComponent from "@/components/login/login";
+import ShareMovieItem from "@/components/shareMovieItem/shareMovieItem";
+// import ShareMovie from "@/components/shareMovie/shareMovie";
+import { setAccessToken, setCurrentUser } from "@/utils/storage";
+import { useEffect, useState } from "react";
+import BaseService from "services/api/baseApi";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
+export async function getServerSideProps({ req }) {
+  const currentHost =
+    `${req.headers["x-forwarded-proto"]}://${req.headers.host}/` || "";
 
-export default function Index() {
-  const { data, error, isLoading } = useSWR<Person[]>('/api/people', fetcher)
+  return {
+    props: {
+      currentHost,
+    },
+  };
+}
 
-  if (error) return <div>Failed to load</div>
-  if (isLoading) return <div>Loading...</div>
-  if (!data) return null
+export default function Index({ currentHost }) {
+  const urlApi = `${currentHost}api/`;
+  const [ videos, setVideos ] = useState([])
+  
+  const onLogin = async (data) => {
+    const url = `${urlApi}users/login`;
+    const api = new BaseService(url);
+    const { data: result } = await api.post(JSON.stringify(data));
+    setAccessToken(result.token);
+    setCurrentUser(data.email);
+  };
 
-  return (
-    <ul>
-      {data.map((p) => (
-        <PersonComponent key={p.id} person={p} />
-      ))}
-    </ul>
-  )
+  const getSharedVideos = async () => {
+    const url = `${urlApi}videos`;
+    const api = new BaseService(url);
+    const { data: result } = await api.get('');
+    setVideos(result);
+  }
+
+  useEffect(() => {
+    getSharedVideos();
+  }, [])
+
+  console.log('==== videos', videos);
+  
+
+  return <>
+    <LoginComponent onLogin={onLogin} />
+    {videos && videos.map(item => {
+      <ShareMovieItem item={item} />
+    })
+
+    }
+  </>
 }
