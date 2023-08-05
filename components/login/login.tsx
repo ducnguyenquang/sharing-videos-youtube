@@ -1,24 +1,37 @@
-import React, { useEffect, useMemo, useState } from "react";
+'use client'
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { getCurrentUser } from "@/utils/storage";
+import { getCurrentUser, setAccessToken, setCurrentUser } from "@/utils/storage";
+import { Context as AppContext } from '@/context/appContext';
+import BaseService from "services/api/baseApi";
+import { message } from "antd";
 
 interface FormValues {
   email: string;
   password: string;
 }
 
-const Login = ({ onLogin }) => {
+const Login = ({ onLogged }) => {
+  const { baseUrl, isLogged } = useContext(AppContext);
+  const currentUser = useMemo(() => (
+    getCurrentUser() as string
+  ), [isLogged]);
+
+  const onLogin = useCallback(async (data) => {
+    const url = `${baseUrl}users/login`;
+    const api = new BaseService(url);
+    const { data: result } = await api.post(JSON.stringify(data));
+    setAccessToken(result.token);
+    setCurrentUser(data.email);
+    onLogged();
+    message.success("Login successful");
+  }, []);
+
   const initialValues: FormValues = {
     email: "",
     password: "",
   };
-
-  const [isLogged, setIsLogged] = useState(false)
-  
-  const currentUser = useMemo(() => {
-    return getCurrentUser();
-  }, [isLogged]);
 
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -31,11 +44,23 @@ const Login = ({ onLogin }) => {
     onLogin(values);
   };
 
-  useEffect(() => {
-    if(currentUser) setIsLogged(true)
-  }, [currentUser, isLogged])
+  const onShareAMovie = () => {
+    console.log('to do')
+  }
+
+  const onLogout = () => {
+    console.log('to do')
+  }
   
-  return isLogged ? <>{currentUser}</> : 
+  return currentUser ? <div>
+    <div>Welcome {currentUser}</div>
+    <button type="button" onClick={onShareAMovie} >
+      Share a movie
+    </button>
+    <button type="button" onClick={onLogout}>
+      Logout
+    </button>
+  </div> : 
     (<Formik
       initialValues={initialValues}
       validationSchema={validationSchema}

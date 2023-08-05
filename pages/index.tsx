@@ -1,9 +1,10 @@
 import LoginComponent from "@/components/login/login";
 import ShareMovieItem from "@/components/shareMovieItem/shareMovieItem";
-// import ShareMovie from "@/components/shareMovie/shareMovie";
-import { setAccessToken, setCurrentUser } from "@/utils/storage";
-import { useEffect, useState } from "react";
+import { message } from "antd";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import BaseService from "services/api/baseApi";
+import { Context as AppContext } from "@/context/appContext";
+import { getStringToObject } from "@/utils/string";
 
 export async function getServerSideProps({ req }) {
   const currentHost =
@@ -16,38 +17,45 @@ export async function getServerSideProps({ req }) {
   };
 }
 
-export default function Index({ currentHost }) {
+function Index({ currentHost }) {
   const urlApi = `${currentHost}api/`;
-  const [ videos, setVideos ] = useState([])
-  
-  const onLogin = async (data) => {
-    const url = `${urlApi}users/login`;
-    const api = new BaseService(url);
-    const { data: result } = await api.post(JSON.stringify(data));
-    setAccessToken(result.token);
-    setCurrentUser(data.email);
-  };
+  const [isLogged, setIsLogged] = useState(false);
 
+  const [videos, setVideos] = useState([]);
+  
   const getSharedVideos = async () => {
     const url = `${urlApi}videos`;
     const api = new BaseService(url);
-    const { data: result } = await api.get('');
+    const { data: result } = await api.get("");
     setVideos(result);
-  }
+  };
 
   useEffect(() => {
     getSharedVideos();
+  }, []);
+
+  console.log("==== videos", videos);
+
+  const getContextData = useCallback(() => {
+    return {
+      baseUrl: urlApi,
+      isLogged: isLogged,
+    };
+  }, [isLogged]);
+
+
+  const onLogged = useCallback(() => {
+    setIsLogged(true);
   }, [])
 
-  console.log('==== videos', videos);
-  
-
-  return <>
-    <LoginComponent onLogin={onLogin} />
-    {videos && videos.map(item => {
-      <ShareMovieItem item={item} />
-    })
-
-    }
-  </>
+  return (<AppContext.Provider value={getContextData()}>
+    <LoginComponent onLogged={onLogged} />
+    {/* TODO */}
+    {/* {videos &&
+      videos.map((item) => {
+        <ShareMovieItem item={item} />;
+      })} */}
+  </AppContext.Provider>);
 }
+
+export default Index;
