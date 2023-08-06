@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import BaseService from "services/api/baseApi";
 import { Context as AppContext } from "@/context/appContext";
 import { getStringToObject } from "@/utils/string";
+import { useRouter } from 'next/router';
 
 export async function getServerSideProps({ req }) {
   const currentHost =
@@ -17,7 +18,24 @@ export async function getServerSideProps({ req }) {
   };
 }
 
+// export async function getStaticProps(context) {
+//   console.log('==== context', context);
+  
+//   const currentHost = ''
+//   // const res = fetch("http://localhost:3000/api/posts");
+//   // const {posts} = await (await res).json()
+
+//   return {
+//       props: {
+//         currentHost
+//       }
+//   }
+// }
+
 function Index({ currentHost }) {
+  const router = useRouter();
+  console.log('==== router.req.headers.host', router);
+
   const urlApi = `${currentHost}api/`;
   const [isLogged, setIsLogged] = useState(false);
 

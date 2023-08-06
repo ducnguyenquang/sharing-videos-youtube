@@ -1,11 +1,16 @@
-'use client'
-import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
+"use client";
+import React, { useCallback, useContext, useMemo } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { getCurrentUser, setAccessToken, setCurrentUser } from "@/utils/storage";
-import { Context as AppContext } from '@/context/appContext';
+import {
+  getCurrentUser,
+  setAccessToken,
+  setCurrentUser,
+} from "@/utils/storage";
+import { Context as AppContext } from "@/context/appContext";
 import BaseService from "services/api/baseApi";
 import { message } from "antd";
+import Logged from "../logged/logged";
 
 interface FormValues {
   email: string;
@@ -14,9 +19,7 @@ interface FormValues {
 
 const Login = ({ onLogged }) => {
   const { baseUrl, isLogged } = useContext(AppContext);
-  const currentUser = useMemo(() => (
-    getCurrentUser() as string
-  ), [isLogged]);
+  const currentUser = useMemo(() => getCurrentUser() as string, [isLogged]);
 
   const onLogin = useCallback(async (data) => {
     const url = `${baseUrl}users/login`;
@@ -44,24 +47,10 @@ const Login = ({ onLogged }) => {
     onLogin(values);
   };
 
-  const onShareAMovie = () => {
-    console.log('to do')
-  }
-
-  const onLogout = () => {
-    console.log('to do')
-  }
-  
-  return currentUser ? <div>
-    <div>Welcome {currentUser}</div>
-    <button type="button" onClick={onShareAMovie} >
-      Share a movie
-    </button>
-    <button type="button" onClick={onLogout}>
-      Logout
-    </button>
-  </div> : 
-    (<Formik
+  return currentUser ? (
+    <Logged />
+  ) : (
+    <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={handleLogin}
@@ -86,7 +75,8 @@ const Login = ({ onLogged }) => {
           </button>
         </Form>
       )}
-    </Formik>)}
-
+    </Formik>
+  );
+};
 
 export default Login;
