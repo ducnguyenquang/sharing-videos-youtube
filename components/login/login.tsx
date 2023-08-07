@@ -1,33 +1,35 @@
-"use client";
-import React, { useCallback, useContext, useMemo } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import {
-  getCurrentUser,
-  setAccessToken,
-  setCurrentUser,
-} from "@/utils/storage";
+import { setAccessToken, setCurrentUser } from "@/utils/storage";
 import { Context as AppContext } from "@/context/appContext";
 import BaseService from "services/api/baseApi";
 import { message } from "antd";
-import Logged from "../logged/logged";
-
+import Logged from "@/components/Logged/Logged";
+import loginStyles from "./login.module.css";
+import { useAuth } from '@/context/authContext';
 interface FormValues {
   email: string;
   password: string;
 }
 
-const Login = ({ onLogged }) => {
-  const { baseUrl, isLogged } = useContext(AppContext);
-  const currentUser = useMemo(() => getCurrentUser() as string, [isLogged]);
+const Login = ({ onLogin, onLogout }) => {
+  const { baseUrl, isLogged: isLoggedContext } = useContext(AppContext);
+  const { isLoggedIn } = useAuth();
+  console.log('==== isLoggedIn', isLoggedIn);
+  
+  const [isLogged, setIsLogged] = useState(false);
+  useEffect(() => {
+    setIsLogged(isLoggedContext);
+  }, [isLoggedContext]);
 
-  const onLogin = useCallback(async (data) => {
+  const onLoginClick = useCallback(async (data) => {
     const url = `${baseUrl}users/login`;
     const api = new BaseService(url);
     const { data: result } = await api.post(JSON.stringify(data));
     setAccessToken(result.token);
     setCurrentUser(data.email);
-    onLogged();
+    onLogin();
     message.success("Login successful");
   }, []);
 
@@ -44,38 +46,46 @@ const Login = ({ onLogged }) => {
   });
 
   const handleLogin = (values: FormValues) => {
-    onLogin(values);
+    onLoginClick(values);
   };
 
-  return currentUser ? (
-    <Logged />
-  ) : (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleLogin}
-    >
-      {({ isSubmitting, isValid }) => (
-        <Form>
-          <div>
-            <Field placeholder="email" type="text" id="email" name="email" />
-            <ErrorMessage name="email" component="div" />
-          </div>
-          <div>
-            <Field
-              placeholder="password"
-              type="password"
-              id="password"
-              name="password"
-            />
-            <ErrorMessage name="password" component="div" />
-          </div>
-          <button type="submit" disabled={isSubmitting || !isValid}>
-            Login
-          </button>
-        </Form>
+  return (
+    <>
+      {isLogged && <Logged onLogout={onLogout} />}
+      {!isLogged && (
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleLogin}
+        >
+          {({ isSubmitting, isValid }) => (
+            <Form className={loginStyles.loginForm}>
+              <div>
+                <Field
+                  placeholder="email"
+                  type="text"
+                  id="email"
+                  name="email"
+                />
+                <ErrorMessage className={loginStyles.error} name="email" component="div" />
+              </div>
+              <div>
+                <Field
+                  placeholder="password"
+                  type="password"
+                  id="password"
+                  name="password"
+                />
+                <ErrorMessage className={loginStyles.error} name="password" component="div" />
+              </div>
+              <button type="submit" disabled={isSubmitting || !isValid}>
+                Login / Register
+              </button>
+            </Form>
+          )}
+        </Formik>
       )}
-    </Formik>
+    </>
   );
 };
 

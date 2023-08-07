@@ -1,8 +1,9 @@
 import { NextApiResponse, NextApiRequest } from "next";
 import { Video } from "@/interfaces/video";
-import { 
-  // getAllItems, 
-  dynamoDbClient } from "@/utils/dynamoDb";
+import {
+  // getAllItems,
+  dynamoDbClient,
+} from "@/utils/dynamoDb";
 import { TableName } from "@/constants/tables";
 import { DynamoDBDocumentClient, ScanCommand } from "@aws-sdk/lib-dynamodb";
 
@@ -16,45 +17,69 @@ export default async function handler(
     ExclusiveStartKey: undefined,
   };
   const allItems = [];
+
+  const setAllItems = (data) => {
+    allItems.push(...data);
+  };
   const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
+
+  //   async function scanForResults(){
+  //     try {
+  //         var params = {
+  //             TableName: tableName
+  //         };
+  //         var result = await dynamoDbDocClient.scan(params).promise()
+  //         console.log(JSON.stringify(result))
+  //     } catch (error) {
+  //         console.error(error);
+  //     }
+  // }
+  // scanForResults()
 
   const getAllItems = async (tableName) => {
     params.TableName = tableName;
     params.ExclusiveStartKey = undefined;
-    
+    const allItems = [];
 
-    const result = await dynamoDbDocClient.send(new ScanCommand(params), onScan);
-    console.log("result", result);
+    await dynamoDbDocClient.send(
+      new ScanCommand(params),
+      async (err, data) => await onScan(err, data, allItems)
+    );
     console.log("allItems", allItems);
-    console.log("result", result);
-  
     return allItems;
   };
-  
-  const onScan = async (err, data) => {
+
+  const onScan = (err, data, allItems) => {
     if (err) {
       console.error(
         "Unable to scan the table. Error JSON:",
         JSON.stringify(err, null, 2)
       );
-    } else {
-      console.log("Scan succeeded.");
-      // callBack(data.Items);
-      allItems.push(...data.Items)
-      // continue scanning if we have more items
-      if (typeof data.LastEvaluatedKey != "undefined") {
-        console.log("Scanning for more...");
-        params.ExclusiveStartKey = data.LastEvaluatedKey;
-        await dynamoDbDocClient.send(new ScanCommand(params), onScan);
-      }
-      return data.Items;
+      return;
     }
+
+    console.log("Scan succeeded.");
+    allItems.push(...data.Items);
+    console.log("allItems 2", allItems);
+
+    // continue scanning if we have more items
+    if (typeof data.LastEvaluatedKey != "undefined") {
+      console.log("Scanning for more...");
+      params.ExclusiveStartKey = data.LastEvaluatedKey;
+      dynamoDbDocClient.send(
+        new ScanCommand(params),
+        async (err, data) => await onScan(err, data, allItems)
+      );
+    }
+
+    return allItems;
   };
+  // console.log("allItems 3", allItems);
 
-  const videos = getAllItems(tableName);
-  console.log('allItems 11', allItems);
-   
-  return res.status(200).json(allItems);
+  const videos = await getAllItems(tableName).then(data => data);
+  console.log("videos", videos);
 
-  // return res.status(200).json(videos);
+  // return res.status(200).json(allItems);
+
+  return res.status(200).json(videos);
 }

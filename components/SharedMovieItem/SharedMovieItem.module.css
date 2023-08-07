@@ -1,0 +1,33 @@
+.shareMovieItem {
+  display: flex;
+  gap: 1rem;
+}
+.information{
+  width: 400px;
+}
+.title{
+  font-weight: bold;
+  color: red;
+}
+.sharedBy{
+  display: flex;
+}
+.vote{
+  display: flex;
+  gap: 1rem;
+}
+.voteUp{
+  display: flex;
+}
+.voteDown{
+  display: flex;
+}
+.description {
+  width: 400px;
+  max-height: 6em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+}

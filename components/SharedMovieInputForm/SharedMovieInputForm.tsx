@@ -1,13 +1,13 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import "./shareMovieInputForm.module.css";
+import styles from "./sharedMovieInputForm.module.css";
 
 interface FormValues {
   videoUrl: string;
 }
 
-const shareMovieInputForm = ({ onSharedMovie }) => {
+const SharedMovieInputForm = ({ onSharedMovie }) => {
   const initialValues: FormValues = {
     videoUrl: "",
   };
@@ -16,16 +16,9 @@ const shareMovieInputForm = ({ onSharedMovie }) => {
     videoUrl: Yup.string().required("url is required"),
   });
 
-  // const handleUrlChange = (e) => {
-  //   setMovieUrl(e.target.value);
-  // };
-
   const handleSubmit = (values: FormValues) => {
-    // e.preventDefault();
-    // Here you can construct the URL with the movie details as query parameters.
     const sharedMovieURL = encodeURIComponent(values.videoUrl);
     console.log("onSharedMovie", onSharedMovie);
-
     onSharedMovie(sharedMovieURL);
   };
 
@@ -39,18 +32,18 @@ const shareMovieInputForm = ({ onSharedMovie }) => {
       validateOnMount={true}
     >
       {({ isSubmitting, isValid }) => (
-        <div className="share-movie-form">
-          <h2 className="form-header">Share a Youtube movie</h2>
+        <div className={styles.shareMovieForm}>
+          <h2 className={styles.formHeader}>Share a Youtube movie</h2>
           <Form>
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label className="url" htmlFor="videoUrl">
                 Youtube URL:
               </label>
-              <Field type="text" id="videoUrl" name="videoUrl" className="input" />
+              <Field type="text" id="videoUrl" name="videoUrl" />
               <ErrorMessage name="videoUrl" component="div" />
             </div>
             <button
-              className="shareBtn"
+              // className={styles.shareBtn}
               type="submit"
               disabled={isSubmitting || !isValid}
             >
@@ -63,4 +56,4 @@ const shareMovieInputForm = ({ onSharedMovie }) => {
   );
 };
 
-export default shareMovieInputForm;
+export default SharedMovieInputForm;

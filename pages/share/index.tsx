@@ -1,7 +1,9 @@
-import ShareMovieInputForm from "@/components/shareMovieInputForm/shareMovieInputForm";
+import SharedMovieInputForm from "@/components/SharedMovieInputForm/SharedMovieInputForm";
 import BaseService from "services/api/baseApi";
 import { message } from "antd";
 import { getCurrentUser } from "@/utils/storage";
+import Layout from "@/components/Layout/Layout";
+import { AuthProvider } from '@/context/authContext';
 
 export async function getServerSideProps({ req }) {
   const currentHost =
@@ -38,5 +40,12 @@ export default function SharePage({ currentHost }) {
     return result;
   };
 
-  return <ShareMovieInputForm onSharedMovie={onSharedMovie} />;
+  return (
+    <AuthProvider>
+      <Layout>
+        {/* <LoginComponent onLogged={onLogged} onLogout={onLogout} /> */}
+        <SharedMovieInputForm onSharedMovie={onSharedMovie} />
+      </Layout>
+    </AuthProvider>
+  );
 }
