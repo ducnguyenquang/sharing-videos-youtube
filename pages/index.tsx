@@ -10,7 +10,7 @@ import Layout from "@/components/Layout/Layout";
 import { AuthProvider } from '@/context/authContext';
 
 function Index() {
-  const accessToken = useMemo(() => getAccessToken() as string, []);
+  const accessToken = useMemo(() => getAccessToken() || '', []);
   const [currentHost, setCurrentHost] = useState("");
   const urlApi = `${currentHost}api/`;
   const [isLogged, setIsLogged] = useState(accessToken ? true : false);

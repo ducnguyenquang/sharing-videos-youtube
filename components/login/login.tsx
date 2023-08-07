@@ -3,21 +3,17 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { setAccessToken, setCurrentUser } from "@/utils/storage";
 import { Context as AppContext } from "@/context/appContext";
-import BaseService from "services/api/baseApi";
+import BaseService from "@/services/api/baseApi";
 import { message } from "antd";
 import Logged from "@/components/Logged/Logged";
-import loginStyles from "./login.module.css";
-import { useAuth } from '@/context/authContext';
-interface FormValues {
-  email: string;
-  password: string;
-}
+import { useAuth } from "@/context/authContext";
+import styles from "./Login.module.css";
 
 const Login = ({ onLogin, onLogout }) => {
   const { baseUrl, isLogged: isLoggedContext } = useContext(AppContext);
   const { isLoggedIn } = useAuth();
-  console.log('==== isLoggedIn', isLoggedIn);
-  
+  console.log("==== isLoggedIn", isLoggedIn);
+
   const [isLogged, setIsLogged] = useState(false);
   useEffect(() => {
     setIsLogged(isLoggedContext);
@@ -33,7 +29,7 @@ const Login = ({ onLogin, onLogout }) => {
     message.success("Login successful");
   }, []);
 
-  const initialValues: FormValues = {
+  const initialValues = {
     email: "",
     password: "",
   };
@@ -45,7 +41,7 @@ const Login = ({ onLogin, onLogout }) => {
     password: Yup.string().required("Password is required"),
   });
 
-  const handleLogin = (values: FormValues) => {
+  const handleLogin = (values) => {
     onLoginClick(values);
   };
 
@@ -59,7 +55,7 @@ const Login = ({ onLogin, onLogout }) => {
           onSubmit={handleLogin}
         >
           {({ isSubmitting, isValid }) => (
-            <Form className={loginStyles.loginForm}>
+            <Form className={styles.loginForm}>
               <div>
                 <Field
                   placeholder="email"
@@ -67,7 +63,11 @@ const Login = ({ onLogin, onLogout }) => {
                   id="email"
                   name="email"
                 />
-                <ErrorMessage className={loginStyles.error} name="email" component="div" />
+                <ErrorMessage
+                  className={styles.error}
+                  name="email"
+                  component="div"
+                />
               </div>
               <div>
                 <Field
@@ -76,7 +76,11 @@ const Login = ({ onLogin, onLogout }) => {
                   id="password"
                   name="password"
                 />
-                <ErrorMessage className={loginStyles.error} name="password" component="div" />
+                <ErrorMessage
+                  className={styles.error}
+                  name="password"
+                  component="div"
+                />
               </div>
               <button type="submit" disabled={isSubmitting || !isValid}>
                 Login / Register

@@ -1,12 +1,12 @@
-"use client";
+import React from "react";
+import { useCallback, useMemo } from "react";
 import { clear, getCurrentUser } from "@/utils/storage";
 import { useRouter } from "next/dist/client/router";
-import { useCallback, useMemo } from "react";
-import loggedStyles from "./logged.module.css";
+import styles from "./Logged.module.css";
 
 const Logged = ({ onLogout }) => {
   const router = useRouter();
-  const currentUser = useMemo(() => getCurrentUser() as string, []);
+  const currentUser = useMemo(() => getCurrentUser() || "", []);
 
   const onShareAMovie = () => {
     router.push("/share");
@@ -19,7 +19,7 @@ const Logged = ({ onLogout }) => {
   }, []);
 
   return (
-    <div className={loggedStyles.logged}>
+    <div className={styles.loggedForm}>
       <div>Welcome {currentUser}</div>
       <button type="button" onClick={onShareAMovie}>
         Share a movie

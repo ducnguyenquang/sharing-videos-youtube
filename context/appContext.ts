@@ -1,11 +1,11 @@
-import { createContext } from 'react';
+import { createContext } from "react";
 
-interface IAppContextProps {
+type AppContextProps = {
   baseUrl: string;
   isLogged: boolean;
-}
+};
 
-export const Context = createContext<IAppContextProps>({
-  baseUrl: '',
+export const Context = createContext<AppContextProps>({
+  baseUrl: "",
   isLogged: false,
 });
