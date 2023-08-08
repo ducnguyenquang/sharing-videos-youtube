@@ -2,7 +2,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-regular-svg-icons";
-import sharedMovieItemStyles from "./sharedMovieItem.module.css";
+import sharedMovieItemStyles from "./SharedMovieItem.module.css";
 
 const SharedMovieItem = ({ item }) => {
   return (

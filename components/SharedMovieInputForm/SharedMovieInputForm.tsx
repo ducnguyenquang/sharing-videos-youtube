@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import styles from "./sharedMovieInputForm.module.css";
+import styles from "./SharedMovieInputForm.module.css";
 
 interface FormValues {
   videoUrl: string;
