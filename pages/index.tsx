@@ -1,9 +1,7 @@
 "use client";
-import LoginComponent from "@/components/Login/Login";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import BaseService from "services/api/baseApi";
 import { Context as AppContext } from "@/context/appContext";
-import { useRouter } from "next/dist/client/router";
 import { getAccessToken } from "@/utils/storage";
 import SharedMovieItems from "@/components/SharedMovieItems/SharedMovieItems";
 import Layout from "@/components/Layout/Layout";
@@ -20,8 +18,6 @@ function Index() {
     const url = `${urlApi}videos`;
     const api = new BaseService(url);
     const { data: result } = await api.get("");
-    console.log("==== result", result);
-
     setVideos(result);
   };
 
@@ -39,6 +35,10 @@ function Index() {
     }
   }, [videos]);
 
+  useEffect(() => {
+    setIsLogged(accessToken ? true : false)
+  }, [accessToken])
+
   const getContextData = useCallback(() => {
     return {
       baseUrl: urlApi,
@@ -46,13 +46,13 @@ function Index() {
     };
   }, [isLogged]);
 
-  const onLogged = useCallback(() => {
-    setIsLogged(true);
-  }, []);
+  // const onLogged = useCallback(() => {
+  //   setIsLogged(true);
+  // }, []);
 
-  const onLogout = useCallback(() => {
-    setIsLogged(false);
-  }, []);
+  // const onLogout = useCallback(() => {
+  //   setIsLogged(false);
+  // }, []);
 
   const dummyData = [
     {

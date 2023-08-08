@@ -8,13 +8,14 @@ import { message } from "antd";
 import Logged from "@/components/Logged/Logged";
 import { useAuth } from "@/context/authContext";
 import styles from "./Login.module.css";
+import { useRouter } from "next/dist/client/router";
 
 const Login = ({ onLogin, onLogout }) => {
   const { baseUrl, isLogged: isLoggedContext } = useContext(AppContext);
   const { isLoggedIn } = useAuth();
-  console.log("==== isLoggedIn", isLoggedIn);
+  const router = useRouter();
 
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(isLoggedIn);
   useEffect(() => {
     setIsLogged(isLoggedContext);
   }, [isLoggedContext]);
@@ -27,6 +28,7 @@ const Login = ({ onLogin, onLogout }) => {
     setCurrentUser(data.email);
     onLogin();
     message.success("Login successful");
+    router.reload();
   }, []);
 
   const initialValues = {
@@ -82,7 +84,7 @@ const Login = ({ onLogin, onLogout }) => {
                   component="div"
                 />
               </div>
-              <button type="submit" disabled={isSubmitting || !isValid}>
+              <button type="submit" disabled={isSubmitting || !isValid} className={styles.button}>
                 Login / Register
               </button>
             </Form>

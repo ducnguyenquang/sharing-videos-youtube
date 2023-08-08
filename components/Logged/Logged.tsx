@@ -14,17 +14,18 @@ const Logged = ({ onLogout }) => {
 
   const onLogoutClick = useCallback(() => {
     clear();
-    router.push("/");
+    // router.push("/");
     onLogout();
+    router.reload();
   }, []);
 
   return (
     <div className={styles.loggedForm}>
       <div>Welcome {currentUser}</div>
-      <button type="button" onClick={onShareAMovie}>
+      <button type="button" className={styles.button} onClick={onShareAMovie}>
         Share a movie
       </button>
-      <button type="button" onClick={onLogoutClick}>
+      <button type="button" className={styles.button} onClick={onLogoutClick}>
         Logout
       </button>
     </div>
