@@ -4,7 +4,6 @@ import type { ResponseError } from "@/interfaces/error";
 import { dynamoDbClient, execute } from "@/utils/dynamoDb";
 import { TableName } from "@/constants/tables";
 import { PutItemCommand } from "@aws-sdk/client-dynamodb";
-import { v4 } from 'uuid'
 
 export default async function handler(
   req: NextApiRequest,

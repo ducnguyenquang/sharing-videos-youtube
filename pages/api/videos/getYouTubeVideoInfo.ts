@@ -1,10 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import type { Video } from "@/interfaces/video";
-import type { ResponseError } from "@/interfaces/error";
-import { dynamoDbClient, execute } from "@/utils/dynamoDb";
-import { TableName } from "@/constants/tables";
-import { PutItemCommand } from "@aws-sdk/client-dynamodb";
-import { v4 } from 'uuid'
 
 interface VideoInfo {
   title: string;
