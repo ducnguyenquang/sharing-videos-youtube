@@ -11,8 +11,6 @@ const SharedMovieItem = ({ item }) => {
         width="350"
         height="200"
         src={`https://www.youtube.com/embed/${item.id}`}
-        // frameborder="0"
-        // allowfullscreen
       />
       <div className={sharedMovieItemStyles.information}>
         <div className={sharedMovieItemStyles.title}>{item.title}</div>

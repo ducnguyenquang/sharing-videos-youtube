@@ -4,8 +4,6 @@ import {
   ScanCommand,
   PutItemCommand,
   GetItemCommand,
-  UpdateItemCommand,
-  DeleteItemCommand,
 } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 
@@ -15,71 +13,52 @@ const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
 const params = {
   TableName: "users",
   ExclusiveStartKey: undefined,
-  // FilterExpression: "#user_status = :user_status_val",
-  // ExpressionAttributeNames: {
-  //     "#user_status": "user_status",
-  // },
-  // ExpressionAttributeValues: { ":user_status_val": 'somestatus' }
 };
 
 export let allItems = [];
 
 export const execute = async (tableName, method, data) => {
-  let result = undefined
+  let result = undefined;
   switch (method) {
     case RequestMethod.GET:
       result = await dynamoDbClient.send(
         new GetItemCommand({
           TableName: tableName,
           Key: data,
-          // Key: {
-          //   id: { S: request.query.id },
-          // },
         })
       );
       break;
-      case RequestMethod.PUT:
-        result = await dynamoDbClient.send(
-          new PutItemCommand({
-            TableName: tableName,
-            Item: data,
-          })
-        );
+    case RequestMethod.PUT:
+      result = await dynamoDbClient.send(
+        new PutItemCommand({
+          TableName: tableName,
+          Item: data,
+        })
+      );
     default:
       break;
   }
-  
+
   return result.Item;
 };
 
 const setItems = (items) => {
-  console.log("setItems ", items);
-
-  allItems.push(...items)
-  console.log("allItems ", allItems);
-
-}
+  allItems.push(...items);
+};
 
 export const getAllItems = async (tableName) => {
   params.TableName = tableName;
   params.ExclusiveStartKey = undefined;
   allItems = [];
-  const result = await dynamoDbDocClient.send(new ScanCommand(params), async (err, data) => {
-
-    // onScan(err, data, setItems);
-    const debug = await onScan(err, data, (items) => {
-      console.log("items", items);
-      // allItems.push(...items)
-      setItems(items)
-    });
-    console.log("debug", debug);
-
-    return debug;
-    // allItems.push(...debug)
-  });
-  console.log("result", result);
-  console.log("allItems", allItems);
-  console.log("result", result);
+  const result = await dynamoDbDocClient.send(
+    new ScanCommand(params),
+    async (err, data) => {
+      const debug = await onScan(err, data, (items) => {
+        setItems(items);
+      });
+      return debug;
+    }
+  );
 
   return allItems;
 };

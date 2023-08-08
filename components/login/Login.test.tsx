@@ -1,7 +1,3 @@
-// const React = require("react");
-// const { render, screen, fireEvent } = require("@testing-library/react");
-// const Login = require("@/components/Login/Login");
-
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Login from '@/components/Login/Login';

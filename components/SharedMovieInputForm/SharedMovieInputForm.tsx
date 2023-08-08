@@ -13,7 +13,12 @@ const SharedMovieInputForm = ({ onSharedMovie }) => {
   };
 
   const validationSchema = Yup.object().shape({
-    videoUrl: Yup.string().required("url is required"),
+    videoUrl: Yup.string()
+      .matches(
+        /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+        "Enter correct url!"
+      )
+      .required("url is required"),
   });
 
   const handleSubmit = (values: FormValues) => {
@@ -23,36 +28,51 @@ const SharedMovieInputForm = ({ onSharedMovie }) => {
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-      validateOnChange={true}
-      validateOnBlur={true}
-      validateOnMount={true}
-    >
-      {({ isSubmitting, isValid }) => (
-        <div className={styles.shareMovieForm}>
-          <h2 className={styles.formHeader}>Share a Youtube movie</h2>
-          <Form>
-            <div className={styles.formGroup}>
-              <label className="url" htmlFor="videoUrl">
-                Youtube URL:
-              </label>
-              <Field type="text" id="videoUrl" name="videoUrl" />
-              <ErrorMessage name="videoUrl" component="div" />
-            </div>
-            <button
-              // className={styles.shareBtn}
-              type="submit"
-              disabled={isSubmitting || !isValid}
-            >
-              Share
-            </button>
-          </Form>
-        </div>
-      )}
-    </Formik>
+    <div className={styles.centerBox}>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+        validateOnChange={true}
+        validateOnBlur={true}
+        validateOnMount={true}
+      >
+        {({ isSubmitting, isValid }) => (
+          <div className={styles.shareMovieForm}>
+            <div className={styles.formHeader}>Share a Youtube movie</div>
+            <Form className={styles.form}>
+              <div className={styles.formGroup}>
+                <label className="url" htmlFor="videoUrl">
+                  Youtube URL:
+                </label>
+                <div className={styles.videoUrlGroup}>
+                  <Field
+                    type="text"
+                    id="videoUrl"
+                    name="videoUrl"
+                    className={styles.videoUrl}
+                  />
+                  <ErrorMessage
+                    className={styles.error}
+                    name="videoUrl"
+                    component="div"
+                  />
+                </div>
+              </div>
+              <div className={styles.groupButton}>
+                <button
+                  className={styles.shareButton}
+                  type="submit"
+                  disabled={isSubmitting || !isValid}
+                >
+                  Share
+                </button>
+              </div>
+            </Form>
+          </div>
+        )}
+      </Formik>
+    </div>
   );
 };
 

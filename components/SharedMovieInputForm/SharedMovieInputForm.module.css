@@ -1,46 +1,54 @@
-/* ShareMovieForm.css */
+.centerBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  margin: 0;
+}
 .shareMovieForm {
   border: 1px solid #ccc;
-  padding: 20px;
-  max-width: 400px;
+  padding: 40px 40px 20px 20px;
+  max-width: 700px;
   margin: 0 auto;
   border-radius: 4px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
 .formHeader {
-  text-align: center;
-  margin-bottom: 15px;
-  font-size: 1.2rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(5%, -50%);
+  white-space: nowrap;
+  background-color: #fff;
+  padding: 0 5px;
 }
-
 .formGroup {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  display: flex;
 }
-
+.form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
 .title {
   display: block;
   margin-bottom: 5px;
 }
-
-/* .input[type='text'],
-.input[type='number'] {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-} */
-
-/* .shareBtn {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.videoUrl {
+  width: 300px;
 }
-
-.shareBtn:hover {
-  background-color: #0056b3;
-} */
+.groupButton {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+.shareButton{
+  width: 300px;
+}
+.error{
+  color: red;
+}

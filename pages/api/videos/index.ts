@@ -1,7 +1,6 @@
 import { NextApiResponse, NextApiRequest } from "next";
 import { Video } from "@/interfaces/video";
 import {
-  // getAllItems,
   dynamoDbClient,
 } from "@/utils/dynamoDb";
 import { TableName } from "@/constants/tables";
@@ -22,19 +21,6 @@ export default async function handler(
     allItems.push(...data);
   };
   const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
-
-  //   async function scanForResults(){
-  //     try {
-  //         var params = {
-  //             TableName: tableName
-  //         };
-  //         var result = await dynamoDbDocClient.scan(params).promise()
-  //         console.log(JSON.stringify(result))
-  //     } catch (error) {
-  //         console.error(error);
-  //     }
-  // }
-  // scanForResults()
 
   const getAllItems = async (tableName) => {
     params.TableName = tableName;
@@ -74,12 +60,8 @@ export default async function handler(
 
     return allItems;
   };
-  // console.log("allItems 3", allItems);
 
   const videos = await getAllItems(tableName).then(data => data);
-  console.log("videos", videos);
-
-  // return res.status(200).json(allItems);
 
   return res.status(200).json(videos);
 }
