@@ -1,6 +1,15 @@
-import { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from "react";
 
-const AuthContext = createContext();
+interface IAuthContext {
+  isLoggedIn: boolean;
+  login: () => void;
+  logout: () => void;
+}
+const AuthContext = createContext<IAuthContext>({
+  isLoggedIn: false,
+  login: () => {},
+  logout: () => {},
+});
 
 export const useAuth = () => {
   return useContext(AuthContext);

@@ -2,35 +2,35 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faThumbsDown } from "@fortawesome/free-regular-svg-icons";
-import sharedMovieItemStyles from "./SharedMovieItem.module.css";
+import styles from "./SharedMovieItem.module.css";
 
 const SharedMovieItem = ({ item }) => {
   return (
-    <div className={sharedMovieItemStyles.shareMovieItem}>
+    <div className={styles.shareMovieItem}>
       <iframe
         width="350"
         height="200"
         src={`https://www.youtube.com/embed/${item.id}`}
       />
-      <div className={sharedMovieItemStyles.information}>
-        <div className={sharedMovieItemStyles.title}>{item.title}</div>
-        <div className={sharedMovieItemStyles.sharedBy}>
-          Shared by: {item.shared_by}
-        </div>
-        <div className={sharedMovieItemStyles.vote}>
-          <div className={sharedMovieItemStyles.voteUp}>
+      <div className={styles.information}>
+        <div className={styles.title}>{item.title}</div>
+        <div className={styles.sharedBy}>Shared by: {item.shared_by}</div>
+        <div className={styles.vote}>
+          <div className={styles.voteUp}>
             89
-            <FontAwesomeIcon icon={faThumbsUp} />
+            <span className={styles.icon}>
+              <FontAwesomeIcon icon={faThumbsUp} />
+            </span>
           </div>
-          <div className={sharedMovieItemStyles.voteDown}>
+          <div className={styles.voteDown}>
             12
-            <FontAwesomeIcon icon={faThumbsDown} />
+            <span className={styles.icon}>
+              <FontAwesomeIcon icon={faThumbsDown} />
+            </span>
           </div>
         </div>
         <div>Description:</div>
-        <div className={sharedMovieItemStyles.description}>
-          {item.description}
-        </div>
+        <div className={styles.description}>{item.description}</div>
       </div>
     </div>
   );

@@ -1,22 +1,17 @@
 import React from "react";
 import { useCallback, useMemo } from "react";
 import { clear, getCurrentUser } from "@/utils/storage";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/navigation";
 import styles from "./Logged.module.css";
 
-const Logged = ({ onLogout }) => {
+const Logged = ({ onLogout, onShareAMovie }) => {
   const router = useRouter();
   const currentUser = useMemo(() => getCurrentUser() || "", []);
 
-  const onShareAMovie = () => {
-    router.push("/share");
-  };
-
   const onLogoutClick = useCallback(() => {
     clear();
-    // router.push("/");
     onLogout();
-    router.reload();
+    router.refresh();
   }, []);
 
   return (

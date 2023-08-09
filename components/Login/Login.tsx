@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -8,7 +9,7 @@ import { message } from "antd";
 import Logged from "@/components/Logged/Logged";
 import { useAuth } from "@/context/authContext";
 import styles from "./Login.module.css";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/navigation";
 
 const Login = ({ onLogin, onLogout }) => {
   const { baseUrl, isLogged: isLoggedContext } = useContext(AppContext);
@@ -28,7 +29,7 @@ const Login = ({ onLogin, onLogout }) => {
     setCurrentUser(data.email);
     onLogin();
     message.success("Login successful");
-    router.reload();
+    router.refresh();
   }, []);
 
   const initialValues = {
@@ -47,9 +48,13 @@ const Login = ({ onLogin, onLogout }) => {
     onLoginClick(values);
   };
 
+  const onShareAMovie = () => {
+    router.push("/share");
+  };
+
   return (
     <>
-      {isLogged && <Logged onLogout={onLogout} />}
+      {isLogged && <Logged onLogout={onLogout} onShareAMovie={onShareAMovie} />}
       {!isLogged && (
         <Formik
           initialValues={initialValues}
@@ -84,7 +89,11 @@ const Login = ({ onLogin, onLogout }) => {
                   component="div"
                 />
               </div>
-              <button type="submit" disabled={isSubmitting || !isValid} className={styles.button}>
+              <button
+                type="submit"
+                disabled={isSubmitting || !isValid}
+                className={styles.button}
+              >
                 Login / Register
               </button>
             </Form>

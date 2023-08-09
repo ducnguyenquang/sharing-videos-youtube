@@ -1,3 +1,4 @@
+import React from "react";
 import SharedMovieInputForm from "@/components/SharedMovieInputForm/SharedMovieInputForm";
 import BaseService from "services/api/baseApi";
 import { message } from "antd";

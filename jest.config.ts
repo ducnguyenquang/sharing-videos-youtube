@@ -2,9 +2,11 @@ export {};
 
 module.exports = {
   transform: {
-    "^.+\\.tsx?$": "ts-jest",
+    "^.+\\.(ts|tsx)$": "ts-jest",
   },
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/$1'
-  }
+    "^@/(.*)$": "<rootDir>/$1",
+    "\\.module\\.css$": "identity-obj-proxy",
+  },
+  testEnvironment: "jest-environment-jsdom",
 };
