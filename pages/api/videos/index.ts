@@ -1,12 +1,11 @@
 import { NextApiResponse, NextApiRequest } from "next";
-import { Video } from "@/interfaces/video";
 import { dynamoDbClient } from "@/utils/dynamoDb";
 import { TableName } from "@/constants/tables";
 import { DynamoDBDocumentClient, ScanCommand } from "@aws-sdk/lib-dynamodb";
 
 export default async function handler(
   _req: NextApiRequest,
-  res: NextApiResponse<Video[]>
+  res: NextApiResponse
 ) {
   const tableName = TableName.VIDEOS;
   const params = {
@@ -25,7 +24,7 @@ export default async function handler(
     return videos;
   };
 
-  const videos = await getAllItems(tableName).then((data) => data);
+  const videos = await getAllItems(tableName);
 
   return res.status(200).json(videos);
 }
