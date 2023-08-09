@@ -15,7 +15,7 @@ const SharedMovieInputForm = ({ onSharedMovie }) => {
   const validationSchema = Yup.object().shape({
     videoUrl: Yup.string()
       .matches(
-        /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+        /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/,
         "Enter correct url!"
       )
       .required("url is required"),
