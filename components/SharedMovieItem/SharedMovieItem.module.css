@@ -1,0 +1,44 @@
+.shareMovieItem {
+  display: flex;
+  gap: 2rem;
+}
+.information {
+  width: 400px;
+}
+.title {
+  font-weight: bold;
+  color: red;
+}
+.sharedBy {
+  display: flex;
+}
+.vote {
+  display: flex;
+  gap: 1rem;
+}
+.voteUp {
+  display: flex;
+}
+.voteDown {
+  display: flex;
+}
+.description {
+  width: 400px;
+  max-height: 8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  line-height: 1.4;
+  margin-top: 5px;
+}
+.icon {
+  margin-left: 3px;
+}
+
+@media screen and (max-width: 700px) {
+  .shareMovieItem {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,8 @@
+.sharedMovieItems {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  margin: 0 auto;
+  margin-top: 1rem;
+  gap: 1rem;
+}

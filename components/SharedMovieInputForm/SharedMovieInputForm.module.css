@@ -1,0 +1,54 @@
+.centerBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  margin: 0;
+}
+.shareMovieForm {
+  border: 1px solid #ccc;
+  padding: 40px 40px 20px 20px;
+  max-width: 700px;
+  margin: 0 auto;
+  border-radius: 4px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.formHeader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(5%, -50%);
+  white-space: nowrap;
+  background-color: #fff;
+  padding: 0 5px;
+}
+.formGroup {
+  margin-bottom: 20px;
+  display: flex;
+}
+.form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.title {
+  display: block;
+  margin-bottom: 5px;
+}
+.videoUrl {
+  width: 300px;
+}
+.groupButton {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+.shareButton{
+  width: 300px;
+}
+.error{
+  color: red;
+}

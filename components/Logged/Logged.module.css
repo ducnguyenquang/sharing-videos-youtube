@@ -1,0 +1,9 @@
+.loggedForm {
+  display: flex;
+  justify-content: end;
+  gap: 1rem;
+}
+
+.button {
+  height: 28px;
+}

@@ -1,21 +1,60 @@
-import useSWR from 'swr'
-import PersonComponent from '../components/Person'
-import type { Person } from '../interfaces'
+"use client";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import BaseService from "services/api/baseApi";
+import { Context as AppContext } from "@/context/appContext";
+import { getAccessToken } from "@/utils/storage";
+import SharedMovieItems from "@/components/SharedMovieItems/SharedMovieItems";
+import Layout from "@/components/Layout/Layout";
+import { AuthProvider } from '@/context/authContext';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
+function Index() {
+  const accessToken = useMemo(() => getAccessToken() || '', []);
+  const [currentHost, setCurrentHost] = useState("");
+  const urlApi = `${currentHost}api/`;
+  const [isLogged, setIsLogged] = useState(accessToken ? true : false);
+  const [videos, setVideos] = useState([]);
 
-export default function Index() {
-  const { data, error, isLoading } = useSWR<Person[]>('/api/people', fetcher)
+  const getSharedVideos = async () => {
+    const url = `${urlApi}videos`;
+    const api = new BaseService(url);
+    const { data: result } = await api.get("");
+    setVideos(result);
+  };
 
-  if (error) return <div>Failed to load</div>
-  if (isLoading) return <div>Loading...</div>
-  if (!data) return null
+  useEffect(() => {
+    if (!currentHost) {
+      const { protocol, host } = window.location;
+      setCurrentHost(`${protocol}//${host}`);
+    }
+  }, [currentHost]);
+
+  useEffect(() => {
+    if (videos.length === 0) {
+      getSharedVideos();
+    }
+  }, [videos]);
+
+  useEffect(() => {
+    setIsLogged(accessToken ? true : false)
+  }, [accessToken])
+
+  const getContextData = useCallback(() => {
+    return {
+      baseUrl: urlApi,
+      isLogged: isLogged,
+    };
+  }, [isLogged]);
+
 
   return (
-    <ul>
-      {data.map((p) => (
-        <PersonComponent key={p.id} person={p} />
-      ))}
-    </ul>
-  )
+    <AuthProvider>
+      <AppContext.Provider value={getContextData()}>
+        <Layout>
+          <SharedMovieItems videos={videos} />
+        </Layout>
+      </AppContext.Provider>
+    </AuthProvider>
+  );
 }
+
+export default Index;

@@ -1,0 +1,20 @@
+.loginForm {
+  display: flex;
+  justify-content: end;
+  gap: 1rem;
+}
+
+.error {
+  color: red;
+}
+
+.button {
+  height: 28px;
+  width: fit-content;
+}
+
+@media screen and (max-width: 500px) {
+  .loginForm {
+    flex-direction: column;
+  }
+}
